@@ -1,6 +1,8 @@
+import allure
 import pytest
 import os
 from playwright.sync_api import sync_playwright
+
 
 
 def pytest_addoption(parser):
@@ -34,8 +36,23 @@ def page(request):
 
 
 # Hook to detect test result
-@pytest.hookimpl(hookwrapper=True, tryfirst=True)
+@pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     outcome = yield
-    rep = outcome.get_result()
-    setattr(item, "rep_call", rep)
+    result = outcome.get_result()
+
+    if result.when == "call" and result.failed:
+        page = item.funcargs.get("page", None)
+
+        if page:
+            os.makedirs("test-reports/screenshots", exist_ok=True)
+
+            screenshot_path = f"test-reports/screenshots/{item.name}.png"
+            page.screenshot(path=screenshot_path)
+
+            with open(screenshot_path, "rb") as f:
+                allure.attach(
+                    f.read(),
+                    name="Failure Screenshot",
+                    attachment_type=allure.attachment_type.PNG
+                )

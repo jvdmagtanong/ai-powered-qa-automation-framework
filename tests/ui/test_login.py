@@ -1,10 +1,20 @@
+import allure
 from pages.login_page import LoginPage
 from utils.config import USERNAME, PASSWORD
 
+
+@allure.epic("UI Testing")
+@allure.feature("Authentication")
+@allure.story("Valid Login")
+@allure.severity(allure.severity_level.CRITICAL)
 def test_login_success(page):
     login = LoginPage(page)
 
-    login.goto()
-    login.login(USERNAME, PASSWORD)
+    with allure.step("Open login page"):
+        login.goto()
 
-    assert "inventory" in page.url
+    with allure.step("Enter valid username and password and click login button"):
+        login.login(USERNAME, PASSWORD)
+
+    with allure.step("Verify user lands on dashboard"):
+        assert "inventory" in page.url

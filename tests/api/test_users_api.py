@@ -1,7 +1,8 @@
 import requests
+import allure
 from utils.config import BASE_API_URL
 
-
+@allure.epic("API Testing")
 def test_get_users():
     response = requests.get(f"{BASE_API_URL}/users")
 

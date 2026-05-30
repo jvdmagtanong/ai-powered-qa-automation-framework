@@ -1,9 +1,11 @@
+from utils.config import BASE_UI_URL
+
 class LoginPage:
     def __init__(self, page):
         self.page = page
 
     def goto(self):
-        self.page.goto("https://www.saucedemo.com/")
+        self.page.goto(BASE_UI_URL)
 
     def login(self, username, password):
         self.page.fill("#user-name", username)

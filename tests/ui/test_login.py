@@ -1,9 +1,10 @@
 from pages.login_page import LoginPage
+from utils.config import USERNAME, PASSWORD
 
 def test_login_success(page):
     login = LoginPage(page)
 
     login.goto()
-    login.login("standard_user", "secret_sauce")
+    login.login(USERNAME, PASSWORD)
 
     assert "inventory" in page.url

@@ -2,5 +2,6 @@ venv/
 __pycache__/
 .pytest_cache/
 assets/ 
+test-reports/
 *.pyc
 report.html

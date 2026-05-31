@@ -22,20 +22,6 @@ Designed to demonstrate real-world QA Automation / SDET skills including test de
 
 ---
 
-# 📁 Project Structure
-├── tests/
-│   ├── ui/ # UI tests (Playwright)
-│   ├── api/ # API tests (requests)
-│
-├── pages/ # Page Object Model
-├── utils/ # Config & helpers
-├── test-reports/ # Allure & HTML reports
-├── conftest.py # Pytest fixtures
-├── requirements.txt
-└── README.md
-
----
-
 ## Features
 - UI automation for e-commerce demo app
 - Login and cart workflow tests

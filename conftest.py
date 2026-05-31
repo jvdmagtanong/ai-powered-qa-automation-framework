@@ -2,7 +2,9 @@ import allure
 import pytest
 import os
 from playwright.sync_api import sync_playwright
-
+from datetime import datetime
+from utils.gemini_failure_analyzer import analyze_test_failure
+# from utils.openai_failure_analyzer import analyze_failure
 
 
 def pytest_addoption(parser):
@@ -35,24 +37,55 @@ def page(request):
         browser.close()
 
 
-# Hook to detect test result
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     outcome = yield
-    result = outcome.get_result()
+    report = outcome.get_result()
 
-    if result.when == "call" and result.failed:
-        page = item.funcargs.get("page", None)
+    # Only take screenshot on actual test failure
+    if report.when == "call" and report.failed:
+        test_name = item.name
+        page = item.funcargs.get("page")
 
         if page:
-            os.makedirs("test-reports/screenshots", exist_ok=True)
+            screenshots_dir = "test-reports/screenshots"
+            os.makedirs(screenshots_dir, exist_ok=True)
 
-            screenshot_path = f"test-reports/screenshots/{item.name}.png"
+            timestamp = datetime.now().strftime(
+                "%Y-%m-%d_%H-%M-%S"
+            )
+
+            screenshot_path = (
+                f"{screenshots_dir}/"
+                f"{test_name}_{timestamp}.png"
+            )
+
             page.screenshot(path=screenshot_path)
 
-            with open(screenshot_path, "rb") as f:
-                allure.attach(
-                    f.read(),
-                    name="Failure Screenshot",
-                    attachment_type=allure.attachment_type.PNG
-                )
+            allure.attach.file(
+                screenshot_path,
+                name=f"{test_name}_failure",
+                attachment_type=allure.attachment_type.PNG
+            )
+        
+        stack_trace = report.longreprtext
+        print(f"\n\n[Gemini AI] Analyzing failure for {test_name}...")
+        analysis = analyze_test_failure(test_name, stack_trace)
+        
+        # print("\n" + "="*40 + "\nGEMINI FAILURE ANALYSIS\n" + "="*40)
+        # print(analysis)
+        # print("="*40 + "\n")
+
+        allure.attach(
+            analysis,
+            name="AI Failure Analysis",
+            attachment_type=allure.attachment_type.TEXT
+        )
+
+        # error_message = str(call.excinfo.value)
+        # ai_summary = analyze_failure(item.name, error_message)
+        # allure.attach(
+        #     ai_summary,
+        #     name="AI Failure Analysis",
+        #     attachment_type=allure.attachment_type.TEXT
+        # )

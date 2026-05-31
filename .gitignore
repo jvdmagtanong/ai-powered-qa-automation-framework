@@ -4,4 +4,4 @@ __pycache__/
 assets/ 
 test-reports/
 *.pyc
-report.html
+.env

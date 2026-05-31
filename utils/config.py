@@ -1,5 +1,12 @@
-BASE_UI_URL = "https://www.saucedemo.com"
-BASE_API_URL = "https://jsonplaceholder.typicode.com"
+import os
+from dotenv import load_dotenv
 
-USERNAME = "standard_user"
-PASSWORD = "secret_sauce"
+load_dotenv()
+
+BASE_UI_URL=os.getenv("BASE_UI_URL")
+BASE_API_URL=os.getenv("BASE_API_URL")
+USERNAME=os.getenv("USERNAME")
+PASSWORD=os.getenv("PASSWORD")
+
+if not BASE_API_URL or not BASE_UI_URL:
+    raise ValueError("Missing required environment variables")

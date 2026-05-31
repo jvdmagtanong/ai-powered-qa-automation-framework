@@ -81,3 +81,6 @@ open test-reports/allure-report/index.html
 - Screenshot capture on failure (UI tests)
 - CI/CD-ready structure (GitHub Actions compatible)
 
+## 📊 Live Test Report
+View the latest automated test execution report here:
+[View Allure Report](https://jvdmagtanong.github.io/ai-powered-qa-automation-framework/)

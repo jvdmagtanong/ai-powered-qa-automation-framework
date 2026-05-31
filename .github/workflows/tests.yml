@@ -28,18 +28,15 @@ jobs:
         run: |
           pytest --alluredir=test-reports/allure-results
 
-      - name: Install Java
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: "temurin"
           java-version: "17"
 
-      - name: Install Allure CLI
+      - name: Install Allure
         run: |
-          wget https://github.com/allure-framework/allure2/releases/latest/download/allure-2.35.1.tgz
-          tar -zxvf allure-2.35.1.tgz
-          sudo mv allure-2.35.1 /opt/allure
-          sudo ln -s /opt/allure/bin/allure /usr/bin/allure
+          sudo npm install -g allure-commandline --save-dev
 
       - name: Generate Allure Report
         run: |

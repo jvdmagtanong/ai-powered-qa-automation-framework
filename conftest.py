@@ -3,6 +3,7 @@ import pytest
 import os
 from playwright.sync_api import sync_playwright
 from datetime import datetime
+from utils.config import HEADED
 from utils.gemini_failure_analyzer import analyze_test_failure
 # from utils.openai_failure_analyzer import analyze_failure
 
@@ -18,7 +19,8 @@ def pytest_addoption(parser):
 
 @pytest.fixture
 def page(request):
-    headed = request.config.getoption("--headed")
+    cli_headed = request.config.getoption("--headed")
+    headed = cli_headed or HEADED
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=not headed)

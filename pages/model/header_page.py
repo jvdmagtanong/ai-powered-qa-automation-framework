@@ -1,8 +1,9 @@
 from pages.locator.header_locator import HeaderLocator
+from pages.model.base_page import BasePage
 
-class HeaderPage:
+class HeaderPage(BasePage):
     def __init__(self, page):
-        self.page = page
+        super().__init__(page)
 
     def shopping_cart_link(self):
         return self.page.locator(HeaderLocator.SHOPPING_CART_LINK)
@@ -41,24 +42,24 @@ class HeaderPage:
         )
 
     def click_shopping_cart_link(self):
-        self.shopping_cart_link().click()
+        self.click(self.shopping_cart_link())
 
     def click_open_menu_button(self):
-        if self.open_menu_button().is_visible():
-            self.open_menu_button().click()
+        if self.is_visible(self.open_menu_button()):
+            self.click(self.open_menu_button())
 
     def click_inventory_sidebar_link(self):
         self.click_open_menu_button()
-        self.inventory_sidebar_link().click()
+        self.click(self.inventory_sidebar_link())
 
     def click_logout_sidebar_link(self):
         self.click_open_menu_button()
-        self.logout_sidebar_link().click()
+        self.click(self.logout_sidebar_link())
 
     def click_reset_sidebar_link(self):
         self.click_open_menu_button()
-        self.reset_sidebar_link().click()
+        self.click(self.reset_sidebar_link())
 
     def click_close_menu_button(self):
-        if self.close_menu_button().is_visible():
-            self.close_menu_button().click()
+        if self.is_visible(self.close_menu_button()):
+            self.click(self.close_menu_button())

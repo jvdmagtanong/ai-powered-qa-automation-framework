@@ -5,3 +5,5 @@ assets/
 test-reports/
 *.pyc
 .env
+.vscode/
+.vscode/settings.json

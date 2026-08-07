@@ -1,9 +1,10 @@
+from pages.model.base_page import BasePage
 from pages.locator.allitems_locator import AllItemsLocator
 
 
-class AllItemsPage:
+class AllItemsPage(BasePage):
     def __init__(self, page):
-        self.page = page
+        super().__init__(page)
 
     def add_or_remove_item_from_cart(self, item_label, isAdding: bool = True):
         item = self.page.locator(AllItemsLocator.INVENTORY_ITEM).filter(
@@ -15,10 +16,8 @@ class AllItemsPage:
         remove_button = item.get_by_role(remove_from_cart_role, name=remove_from_cart_name)
 
         if isAdding:
-            if add_to_cart_button.is_visible():
-                add_to_cart_button.click()
+            self.click(add_to_cart_button)
         else:
-            if remove_button.is_visible():
-                remove_button.click()
+            self.click(remove_button)
 
 

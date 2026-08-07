@@ -1,11 +1,11 @@
-from playwright.sync_api import expect
 from utils.config import BASE_UI_URL
+from pages.model.base_page import BasePage
 from pages.locator.login_locator import LoginLocator
 
+class LoginPage(BasePage):
 
-class LoginPage:
     def __init__(self, page):
-        self.page = page
+        super().__init__(page)
 
     def goto(self):
         self.page.goto(BASE_UI_URL)
@@ -33,12 +33,12 @@ class LoginPage:
         return self.page.locator(LoginLocator.ERROR_MESSAGE)
 
     def login(self, username, password):
-        self.username_input().fill(username)
-        self.password_input().fill(password)
-        self.login_button().click()
+        self.fill(self.username_input(), username)
+        self.fill(self.password_input(), password)
+        self.click(self.login_button())
 
     def verify_error_message(self, expected_message):
         error_message = self.error_message()
-        expect(error_message).to_be_visible()
-        expect(error_message).to_have_text(expected_message)
+        self.verify_element_is_visible(error_message)
+        self.verify_element_has_text(error_message, expected_message)
     

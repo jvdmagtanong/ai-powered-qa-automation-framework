@@ -1,13 +1,22 @@
 import os
 from dotenv import load_dotenv
 
+
 load_dotenv()
 
-BASE_UI_URL=os.getenv("BASE_UI_URL")
-BASE_API_URL=os.getenv("BASE_API_URL")
-USERNAME=os.getenv("USERNAME")
-PASSWORD=os.getenv("PASSWORD")
-HEADED=os.getenv("HEADED", "False").lower() == "true"
 
-if not BASE_API_URL or not BASE_UI_URL:
-    raise ValueError("Missing required environment variables")
+def get_required_env(name: str) -> str:
+    value = os.getenv(name)
+
+    if not value:
+        raise ValueError(f"Missing required environment variable: {name}")
+
+    return value
+
+
+BASE_UI_URL = get_required_env("BASE_UI_URL")
+BASE_API_URL = get_required_env("BASE_API_URL")
+USERNAME = get_required_env("USERNAME")
+PASSWORD = get_required_env("PASSWORD")
+
+HEADED = os.getenv("HEADED", "False").lower() == "true"

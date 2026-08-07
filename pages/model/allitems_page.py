@@ -1,4 +1,4 @@
-from pages.allitems.allitems_locator import AllItemsLocator
+from pages.locator.allitems_locator import AllItemsLocator
 
 
 class AllItemsPage:

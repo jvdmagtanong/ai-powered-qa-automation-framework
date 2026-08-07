@@ -1,9 +1,10 @@
 import allure
+import pytest
 from conftest import page
-from pages.login.login_page import LoginPage
-from pages.allitems.allitems_page import AllItemsPage
-from pages.header.header_page import HeaderPage
-from pages.cart.cart_page import CartPage
+from pages.model.login_page import LoginPage
+from pages.model.allitems_page import AllItemsPage
+from pages.model.header_page import HeaderPage
+from pages.model.cart_page import CartPage
 from utils.config import USERNAME, PASSWORD
 
 
@@ -11,6 +12,9 @@ from utils.config import USERNAME, PASSWORD
 @allure.feature("Cart")
 @allure.story("User can add item to cart")
 @allure.severity(allure.severity_level.CRITICAL)
+@pytest.mark.ui
+@pytest.mark.smoke
+@pytest.mark.critical
 def test_add_to_cart(page):
     with allure.step("Open login page"):
         login = LoginPage(page)
@@ -34,4 +38,5 @@ def test_add_to_cart(page):
 
     with allure.step("Verify cart page is displayed and item backpack is present in the cart"):
         cart = CartPage(page)
-        assert "cart" in page.url and cart.cart_inventory_item(item_label).is_visible()
+        assert "cart" in page.url
+        cart.expect_cart_inventory_item_toBeVisible(item_label, isVisible=True)

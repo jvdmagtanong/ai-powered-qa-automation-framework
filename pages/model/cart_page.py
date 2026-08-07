@@ -1,4 +1,5 @@
-from pages.cart.cart_locator import CartLocator
+from playwright.sync_api import expect
+from pages.locator.cart_locator import CartLocator
 
 class CartPage:
     def __init__(self, page):
@@ -24,3 +25,9 @@ class CartPage:
         return self.page.locator(CartLocator.CHECKOUT_BUTTON).or_(
             self.page.get_by_role(role, name=name)
         )
+
+    def expect_cart_inventory_item_toBeVisible(self, item_label, isVisible=True):
+        if isVisible:
+            expect(self.cart_inventory_item(item_label)).to_be_visible()
+        else:
+            expect(self.cart_inventory_item(item_label)).not_to_be_visible()

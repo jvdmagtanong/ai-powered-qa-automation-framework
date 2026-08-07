@@ -1,11 +1,14 @@
 import allure
-from pages.login.login_page import LoginPage
+import pytest
+from pages.model.login_page import LoginPage
 
 
 @allure.epic("UI Testing")
 @allure.feature("Authentication")
 @allure.story("Locked User")
 @allure.severity(allure.severity_level.CRITICAL)
+@pytest.mark.ui
+@pytest.mark.regression
 def test_locked_user(page):
     login = LoginPage(page)
 
@@ -16,9 +19,4 @@ def test_locked_user(page):
         login.login("locked_out_user", "secret_sauce")
 
     with allure.step("Verify error message is displayed"):
-        error_message = page.locator("[data-test='error']")
-        assert error_message.is_visible()
-        assert (
-            "Sorry, this user has been locked out."
-            in error_message.text_content()
-        )
+        login.verify_error_message("Epic sadface: Sorry, this user has been locked out.")

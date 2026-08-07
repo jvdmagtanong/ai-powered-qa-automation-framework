@@ -17,8 +17,15 @@ then
     exit 1
 fi
 
+MARKER="$1"
 echo "Running tests..."
-pytest --alluredir=test-reports/allure-results || true
+if [ -z "$MARKER" ]; then
+    echo "Running all tests..."
+    pytest --alluredir=test-reports/allure-results || true
+else
+    echo "Running suite: $MARKER"
+    pytest -m "$MARKER" --alluredir=test-reports/allure-results || true
+fi
 
 echo "Generating Allure report..."
 allure generate test-reports/allure-results \

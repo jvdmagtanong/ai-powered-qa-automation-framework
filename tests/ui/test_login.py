@@ -1,5 +1,6 @@
 import allure
-from pages.login.login_page import LoginPage
+import pytest
+from pages.model.login_page import LoginPage
 from utils.config import USERNAME, PASSWORD
 
 
@@ -7,6 +8,9 @@ from utils.config import USERNAME, PASSWORD
 @allure.feature("Authentication")
 @allure.story("Valid Login")
 @allure.severity(allure.severity_level.CRITICAL)
+@pytest.mark.ui
+@pytest.mark.smoke
+@pytest.mark.critical
 def test_login_success(page):
     login = LoginPage(page)
 

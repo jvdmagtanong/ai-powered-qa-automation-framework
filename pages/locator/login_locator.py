@@ -6,3 +6,4 @@ class LoginLocator:
     USERNAME_INPUT_LABEL = "Username"
     PASSWORD_INPUT = "[data-test='password']"
     PASSWORD_INPUT_LABEL = "Password"
+    ERROR_MESSAGE = "[data-test='error']"

@@ -1,4 +1,4 @@
-from pages.header.header_locator import HeaderLocator
+from pages.locator.header_locator import HeaderLocator
 
 class HeaderPage:
     def __init__(self, page):

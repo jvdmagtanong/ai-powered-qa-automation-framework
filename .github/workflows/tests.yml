@@ -4,6 +4,18 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+    inputs:
+      suite:
+        description: "Test suite to run"
+        required: true
+        default: "all"
+        type: choice
+        options:
+          - all
+          - smoke
+          - regression
+          - ui
+          - api
   pull_request:
 
 permissions:
@@ -42,10 +54,16 @@ jobs:
           pip install -r requirements.txt
           playwright install --with-deps
 
-      - name: Run tests with Allure results
-        continue-on-error: true
+      - name: Make test runner executable
+        run: chmod +x run_tests.sh
+
+      - name: Run Test Suite
         run: |
-          pytest --alluredir=test-reports/allure-results
+          if [ "${{ github.event.inputs.suite }}" = "all" ] || [ -z "${{ github.event.inputs.suite }}" ]; then
+            ./run_tests.sh
+          else
+            ./run_tests.sh "${{ github.event.inputs.suite }}"
+          fi
 
       - name: Set up Java
         uses: actions/setup-java@v4

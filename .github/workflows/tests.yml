@@ -54,17 +54,6 @@ jobs:
           pip install -r requirements.txt
           playwright install --with-deps
 
-      - name: Make test runner executable
-        run: chmod +x run_tests.sh
-
-      - name: Run Test Suite
-        run: |
-          if [ "${{ github.event.inputs.suite }}" = "all" ] || [ -z "${{ github.event.inputs.suite }}" ]; then
-            ./run_tests.sh
-          else
-            ./run_tests.sh "${{ github.event.inputs.suite }}"
-          fi
-
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
@@ -75,11 +64,16 @@ jobs:
         run: |
           sudo npm install -g allure-commandline --save-dev
 
-      - name: Generate Allure Report
+      - name: Make test runner executable
+        run: chmod +x run_tests.sh
+
+      - name: Run Test Suite
         run: |
-          allure generate test-reports/allure-results \
-          -o test-reports/allure-report \
-          --clean
+          if [ "${{ github.event.inputs.suite }}" = "all" ] || [ -z "${{ github.event.inputs.suite }}" ]; then
+            ./run_tests.sh
+          else
+            ./run_tests.sh "${{ github.event.inputs.suite }}"
+          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

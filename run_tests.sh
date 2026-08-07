@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set +e
 
 echo "Detecting environment..."
 
@@ -21,16 +21,17 @@ MARKER="$1"
 echo "Running tests..."
 if [ -z "$MARKER" ]; then
     echo "Running all tests..."
-    pytest --alluredir=test-reports/allure-results || true
+    pytest --alluredir=test-reports/allure-results
 else
     echo "Running suite: $MARKER"
-    pytest -m "$MARKER" --alluredir=test-reports/allure-results || true
+    pytest -m "$MARKER" --alluredir=test-reports/allure-results
 fi
+
+TEST_EXIT_CODE=$?
 
 echo "Generating Allure report..."
 allure generate test-reports/allure-results \
   -o test-reports/allure-report \
   --clean
 
-# echo "Report ready:"
-# echo "test-reports/allure-report/index.html"
+exit $TEST_EXIT_CODE

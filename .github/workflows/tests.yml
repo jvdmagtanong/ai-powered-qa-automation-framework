@@ -16,6 +16,18 @@ on:
           - regression
           - ui
           - api
+    
+      reruns:
+        description: "Number of retries for failed tests"
+        required: true
+        default: "0"
+        type: choice
+        options:
+          - "0"
+          - "1"
+          - "2"
+          - "3"
+
   pull_request:
 
 permissions:
@@ -30,6 +42,7 @@ env:
   PASSWORD: ${{ secrets.PASSWORD }}
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
   GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+  RERUNS: ${{ github.event.inputs.reruns }}
 
 jobs:
   qa-tests:

@@ -39,4 +39,5 @@ def test_add_to_cart(page):
     with allure.step("Verify cart page is displayed and item backpack is present in the cart"):
         cart = CartPage(page)
         assert "cart" in page.url
+        assert False
         cart.expect_cart_inventory_item_toBeVisible(item_label, isVisible=True)

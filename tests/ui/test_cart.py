@@ -6,7 +6,9 @@ from pages.model.allitems_page import AllItemsPage
 from pages.model.header_page import HeaderPage
 from pages.model.cart_page import CartPage
 from utils.config import USERNAME, PASSWORD
+import os
 
+_attempt = 0
 
 @allure.epic("UI Testing")
 @allure.feature("Cart")
@@ -39,5 +41,10 @@ def test_add_to_cart(page):
     with allure.step("Verify cart page is displayed and item backpack is present in the cart"):
         cart = CartPage(page)
         assert "cart" in page.url
-        assert False
         cart.expect_cart_inventory_item_toBeVisible(item_label, isVisible=True)
+
+        global _attempt
+        _attempt += 1
+        fail_attempts = int(os.getenv("FAIL_ATTEMPTS", "0"))
+        if _attempt <= fail_attempts:
+            assert False, f"Simulated flaky failure on attempt {_attempt}"

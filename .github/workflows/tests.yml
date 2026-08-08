@@ -28,6 +28,16 @@ on:
           - "2"
           - "3"
 
+      fail_attempts:
+        description: "Temporary simulated failures"
+        required: true
+        default: "0"
+        type: choice
+        options:
+          - "0"
+          - "1"
+          - "2"
+
   pull_request:
 
 permissions:
@@ -43,6 +53,7 @@ env:
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
   GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
   RERUNS: ${{ github.event.inputs.reruns }}
+  FAIL_ATTEMPTS: ${{ github.event.inputs.fail_attempts }}
 
 jobs:
   qa-tests:
@@ -89,13 +100,16 @@ jobs:
           fi
 
       - name: Setup Pages
+        if: always()
         uses: actions/configure-pages@v5
 
       - name: Upload GitHub Pages artifact
+        if: always()
         uses: actions/upload-pages-artifact@v3
         with:
           path: test-reports/allure-report
 
       - name: Deploy to GitHub Pages
+        if: always()
         id: deployment
         uses: actions/deploy-pages@v4

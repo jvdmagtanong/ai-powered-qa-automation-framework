@@ -18,20 +18,31 @@ then
 fi
 
 MARKER="$1"
+WORKERS="${WORKERS:-2}"
+
+echo "Cleaning previous test reports..."
+
+rm -rf test-reports/allure-results
+rm -rf test-reports/allure-report
+
+mkdir -p test-reports/allure-results
+
 echo "Running tests..."
+
 if [ -z "$MARKER" ]; then
-    echo "Running all tests..."
-    pytest --alluredir=test-reports/allure-results
+    echo "Running all tests with $WORKERS workers..."
+    pytest -n "$WORKERS" --alluredir=test-reports/allure-results
 else
-    echo "Running suite: $MARKER"
-    pytest -m "$MARKER" --alluredir=test-reports/allure-results
+    echo "Running suite: $MARKER with $WORKERS workers..."
+    pytest -n "$WORKERS" -m "$MARKER" --alluredir=test-reports/allure-results
 fi
 
 TEST_EXIT_CODE=$?
 
 echo "Generating Allure report..."
+
 allure generate test-reports/allure-results \
-  -o test-reports/allure-report \
-  --clean
+    -o test-reports/allure-report \
+    --clean
 
 exit $TEST_EXIT_CODE

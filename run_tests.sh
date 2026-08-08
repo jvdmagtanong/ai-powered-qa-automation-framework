@@ -17,9 +17,6 @@ then
     exit 1
 fi
 
-MARKER="$1"
-WORKERS="${WORKERS:-2}"
-
 echo "Cleaning previous test reports..."
 
 rm -rf test-reports/allure-results
@@ -27,14 +24,28 @@ rm -rf test-reports/allure-report
 
 mkdir -p test-reports/allure-results
 
+MARKER="$1"
+WORKERS="${WORKERS:-2}"
+RERUNS="${RERUNS:-0}"
+RERUN_DELAY="${RERUN_DELAY:-1}"
+
 echo "Running tests..."
+echo "Workers: $WORKERS"
+echo "Retries: $RERUNS"
+echo "Retry delay: ${RERUN_DELAY}s"
 
 if [ -z "$MARKER" ]; then
-    echo "Running all tests with $WORKERS workers..."
-    pytest -n "$WORKERS" --alluredir=test-reports/allure-results
+    echo "Running all tests with $WORKERS workers... ${RERUNS} retries."
+    pytest -n "$WORKERS" \
+        --reruns "$RERUNS" \
+        --reruns-delay "$RERUN_DELAY" \
+        --alluredir=test-reports/allure-results 
 else
-    echo "Running suite: $MARKER with $WORKERS workers..."
-    pytest -n "$WORKERS" -m "$MARKER" --alluredir=test-reports/allure-results
+    echo "Running suite: $MARKER with $WORKERS workers... ${RERUNS} retries."
+    pytest -n "$WORKERS" -m "$MARKER" \
+        --reruns "$RERUNS" \
+        --reruns-delay "$RERUN_DELAY" \
+        --alluredir=test-reports/allure-results
 fi
 
 TEST_EXIT_CODE=$?

@@ -42,37 +42,46 @@ def suggest_locator_for_elements(element_description, failed_locator, page_sourc
     prompt = f"""
         You are an expert Playwright and QA Automation Engineer.
 
-        The original Playwright locator below is intended to identify a LIST or COLLECTION of similar elements, not a single specific element.
+        The original Playwright locator below is intended to identify a LIST or COLLECTION
+        of similar elements.
 
         Original locator:
         {failed_locator}
 
-        Element description:
+        Specific item being searched for:
         {element_description}
 
-        The locator has failed or no longer identifies the expected collection.
+        The original locator has failed or no longer identifies the expected collection.
 
-        Your task is to find an alternative Playwright locator that identifies the SAME TYPE OF ELEMENTS as the original locator.
+        Your task is to find an alternative Playwright locator that identifies the SAME TYPE
+        OF ELEMENTS as the original locator.
 
         IMPORTANT:
 
-        * Return a locator for the COLLECTION/LIST of elements.
-        * Do NOT return a locator for one specific item.
-        * The returned locator must be usable with Playwright's `.filter(has_text=...)` method.
-        * The test code will use the returned locator to find a specific item by its text afterward.
-        * The locator should therefore identify the parent/container elements representing each item in the collection.
-        * Prefer stable attributes such as `data-test`, `data-testid`, semantic roles, meaningful ARIA attributes, or stable CSS attributes.
-        * Avoid generated classes, dynamic IDs, nth-child selectors, positional selectors, or other brittle selectors when possible.
+        * "{element_description}" is the SPECIFIC ITEM that the test is looking for.
+        * Do NOT return a locator that directly identifies "{element_description}".
+        * Instead, identify the COLLECTION or LIST locator that contains "{element_description}".
+        * The returned locator will be used by the test code with Playwright's
+        `.filter(has_text=...)` method to locate the specific item afterward.
+        * The returned locator must therefore match the parent/container elements
+        representing each item in the collection.
+        * The collection locator must contain the specific item "{element_description}"
+        somewhere within its matching elements.
+        * Prefer stable attributes such as `data-test`, `data-testid`, semantic roles,
+        meaningful ARIA attributes, or stable CSS attributes.
+        * Avoid generated classes, dynamic IDs, nth-child selectors, positional selectors,
+        or other brittle selectors when possible.
         * The locator must be valid Playwright Python syntax.
-        * Return ONLY the locator itself. Do not include Markdown, explanations, quotes, or additional text.
+        * Return ONLY the locator itself.
+        * Do not return Markdown, explanations, quotes, or additional text.
 
         Example:
 
         Original locator:
         [data-test='inventory-item']
 
-        Element description:
-        inventory item collection
+        Specific item being searched for:
+        Sauce Labs Backpack
 
         Good response:
         [data-test='inventory-item']
@@ -80,7 +89,18 @@ def suggest_locator_for_elements(element_description, failed_locator, page_sourc
         Bad response:
         [data-test='inventory-item']:has-text('Sauce Labs Backpack')
 
-        The bad response is incorrect because it identifies one specific item rather than the collection.
+        The bad response is incorrect because it identifies the specific item instead of
+        returning the collection locator.
+
+        Another bad response:
+        [data-test='inventory-item'] >> text="Sauce Labs Backpack"
+
+        The returned locator must identify the COLLECTION, not the individual item.
+
+        The test will perform the filtering separately, for example:
+
+        collection = page.locator(SUGGESTED_LOCATOR)
+        item = collection.filter(has_text="Sauce Labs Backpack")
 
         HTML:
         {page_source[:10000]}

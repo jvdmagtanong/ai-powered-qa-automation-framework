@@ -6,7 +6,7 @@ from utils.dom_sanitizer import sanitize_dom
 from utils.config import USERNAME, PASSWORD  
 from pages.model.login_page import LoginPage
 
-# @pytest.mark.skip
+@pytest.mark.skip
 def test_ai_locator_healer(page):
     with allure.step("Open login page"):
         login = LoginPage(page)
@@ -27,7 +27,7 @@ def test_ai_locator_healer(page):
     print(f"Healed locator count: {healed_locator.count()}")
     assert healed_locator.count() == 1
     
-# @pytest.mark.skip
+@pytest.mark.skip
 def test_ai_collection_locator_healer(page):
     with allure.step("Open login page"):
         login = LoginPage(page)

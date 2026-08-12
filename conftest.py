@@ -3,7 +3,8 @@ import pytest
 import os
 from playwright.sync_api import sync_playwright
 from datetime import datetime
-from utils.config import HEADED
+from utils.config import HEADED, BASE_API_URL
+from utils.api_client import ApiClient
 from utils.gemini_failure_analyzer import analyze_test_failure
 # from utils.openai_failure_analyzer import analyze_failure
 
@@ -37,6 +38,11 @@ def page(request):
             page.screenshot(path=screenshot_path)
 
         browser.close()
+
+
+@pytest.fixture
+def api_client():
+    return ApiClient(BASE_API_URL)
 
 
 @pytest.hookimpl(hookwrapper=True)

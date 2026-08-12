@@ -1,6 +1,7 @@
 ## Test Site
 
-https://www.saucedemo.com/
+UI - https://www.saucedemo.com/
+API - https://jsonplaceholder.typicode.com
 
 ## Author
 
@@ -43,6 +44,51 @@ Designed to demonstrate real-world QA Automation / SDET skills including test de
 * Screenshot capture on UI test failures
 * Test retries for handling transient failures
 * CI/CD-ready structure with GitHub Actions
+
+---
+
+# Environment Configuration
+
+The framework uses environment variables for local configuration and API credentials.
+
+Create a `.env` file in the project root:
+
+```bash
+touch .env
+```
+
+Add the following variables:
+
+```env
+BASE_UI_URL=https://www.saucedemo.com
+BASE_API_URL=https://jsonplaceholder.typicode.com
+USERNAME=standard_user
+PASSWORD=secret_sauce
+GEMINI_API_KEY=your_gemini_api_key
+```
+
+### Gemini API Key
+
+The locator self-healing feature uses Google Gemini to generate alternative Playwright locators when the standard locator fails.
+
+To use AI-assisted locator healing locally:
+
+1. Create a Google AI Studio account.
+2. Generate your own Gemini API key.
+3. Add the key to your local `.env` file:
+
+```env
+GEMINI_API_KEY=your_gemini_api_key
+```
+
+Do not share or commit your API key.
+
+The `.env` file is excluded from Git through `.gitignore`.
+
+Without a valid `GEMINI_API_KEY`, the AI-assisted locator healing functionality will not be available.
+
+> Note: The standard UI and API tests do not require you to use someone else's credentials or API key. Each developer should configure their own local environment.
+
 
 ---
 
@@ -113,7 +159,7 @@ The framework supports both:
 
 The normal locator strategies are always attempted first. AI-assisted recovery is only used as a fallback.
 
-DOM sanitization is performed before page content is sent to Gemini to reduce the risk of exposing sensitive information such as entered form values.
+DOM sanitization is performed before page content is sent to Gemini to remove sensitive elements and entered form values, reducing the risk of exposing confidential information to the AI service.
 
 Locator recovery details are also attached to the Allure report, including the original locator, suggested locator, and validation result.
 

@@ -1,6 +1,7 @@
 ## Test Site
 
-https://www.saucedemo.com/
+UI - https://www.saucedemo.com/
+API - https://jsonplaceholder.typicode.com
 
 ## Author
 

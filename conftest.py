@@ -6,7 +6,6 @@ from datetime import datetime
 from utils.config import HEADED, BASE_API_URL
 from utils.api_client import ApiClient
 from utils.gemini_failure_analyzer import analyze_test_failure
-# from utils.openai_failure_analyzer import analyze_failure
 
 
 def pytest_addoption(parser):
@@ -26,17 +25,7 @@ def page(request):
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=not headed)
         page = browser.new_page()
-
         yield page
-
-        # Screenshot on failure
-        if hasattr(request.node, "rep_call") and request.node.rep_call.failed:
-            screenshot_dir = "test-reports/screenshots"
-            os.makedirs(screenshot_dir, exist_ok=True)
-
-            screenshot_path = f"{screenshot_dir}/{request.node.name}.png"
-            page.screenshot(path=screenshot_path)
-
         browser.close()
 
 
@@ -90,10 +79,3 @@ def pytest_runtest_makereport(item, call):
             attachment_type=allure.attachment_type.TEXT
         )
 
-        # error_message = str(call.excinfo.value)
-        # ai_summary = analyze_failure(item.name, error_message)
-        # allure.attach(
-        #     ai_summary,
-        #     name="AI Failure Analysis",
-        #     attachment_type=allure.attachment_type.TEXT
-        # )

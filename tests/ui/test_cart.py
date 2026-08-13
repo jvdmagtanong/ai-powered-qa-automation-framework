@@ -30,8 +30,7 @@ def test_add_to_cart(page):
 
     with allure.step("Verify shopping cart badge is displayed and has correct count=1"):
         header = HeaderPage(page)
-        assert header.shopping_cart_badge().is_visible() and \
-            header.shopping_cart_badge().inner_text() == "1"
+        header.verify_car_badge_contains_count("1")
 
     with allure.step("Click shopping cart link"):
         header.click_shopping_cart_link()
@@ -39,4 +38,6 @@ def test_add_to_cart(page):
     with allure.step("Verify cart page is displayed and item backpack is present in the cart"):
         cart = CartPage(page)
         assert "cart" in page.url
-        cart.expect_cart_inventory_item_toBeVisible(item_label, isVisible=True)
+        cart.verify_cart_inventory_item_visibility(item_label, isVisible=True)
+
+        

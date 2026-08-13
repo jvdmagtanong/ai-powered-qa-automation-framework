@@ -3,8 +3,6 @@ from pages.locator.allitems_locator import AllItemsLocator
 
 
 class AllItemsPage(BasePage):
-    def __init__(self, page):
-        super().__init__(page)
 
     def add_or_remove_item_from_cart(self, item_label, isAdding: bool = True):
         item = self.get_element_from_list(AllItemsLocator.INVENTORY_ITEM, item_label)

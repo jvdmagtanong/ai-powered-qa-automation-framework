@@ -2,8 +2,6 @@ from pages.model.base_page import BasePage, LocatorStrategy
 from pages.locator.cart_locator import CartLocator
 
 class CartPage(BasePage):
-    def __init__(self, page):
-        super().__init__(page)
 
     def cart_inventory_item(self, item_label):
         return self.get_element_from_list(CartLocator.CART_INVENTORY_ITEM, item_label)
@@ -28,8 +26,9 @@ class CartPage(BasePage):
             role=role, element_description=name
         )
     
-    def expect_cart_inventory_item_toBeVisible(self, item_label, isVisible=True):
+    def verify_cart_inventory_item_visibility(self, item_label, isVisible=True):
         if isVisible:
             self.verifications.verify_element_is_visible(self.cart_inventory_item(item_label))
         else:
             self.verifications.verify_element_is_not_visible(self.cart_inventory_item(item_label))
+

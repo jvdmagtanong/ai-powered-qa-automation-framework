@@ -1,6 +1,14 @@
 import pytest
 import allure
 from utils.api_logger import log_api_response
+from utils.api_assertions import assert_response_contains_payload, assert_response_is_non_empty_list
+from tests.api.data.posts_data import (
+    VALID_POST,
+    INVALID_POST_PAYLOADS,
+    UPDATED_POST,
+    INVALID_POST_IDS,
+    get_invalid_update_post_payload
+)
 
 
 @allure.epic("API Testing")
@@ -13,10 +21,7 @@ def test_get_posts(api_client):
 
     log_api_response(response)
     assert response.status_code == 200
-
-    data = response.json()
-    assert isinstance(data, list)
-    assert len(data) > 0
+    assert_response_is_non_empty_list(response)
 
 
 @allure.epic("API Testing")
@@ -29,12 +34,8 @@ def test_get_posts_by_user(api_client):
 
     log_api_response(response)
     assert response.status_code == 200
-
-    data = response.json()
-    assert isinstance(data, list)
-    assert len(data) > 0
-    non_matching_posts = [post for post in data if post["userId"] != 1]
-    assert len(non_matching_posts) == 0
+    data = assert_response_is_non_empty_list(response)
+    assert all(post["userId"] == 1 for post in data)
 
 
 @allure.epic("API Testing")
@@ -57,19 +58,12 @@ def test_get_posts_by_invalid_user(api_client, user_id):
 @pytest.mark.api
 @pytest.mark.regression
 def test_create_post(api_client):
-    post_data = {
-        "userId": 1,
-        "title": "Jose - Test Post",
-        "body": "Testing api - create a post."
-    }
-    response = api_client.post("/posts", post_data)
+    response = api_client.post("/posts", VALID_POST)
+
     log_api_response(response)
     assert response.status_code == 201
-    data = response.json()
-    assert isinstance(data, dict)
+    data = assert_response_contains_payload(response, VALID_POST)
     assert "id" in data
-    for key, value in post_data.items():
-        assert data[key] == value
 
 
 @allure.epic("API Testing")
@@ -77,23 +71,13 @@ def test_create_post(api_client):
 @allure.story("Create a post with incomplete or edge-case payload")
 @pytest.mark.api
 @pytest.mark.regression
-@pytest.mark.parametrize("post_data", [
-    pytest.param({"userId": 1, "body": "Test create post."}, id="missing-title"), 
-    pytest.param({"userId": 1, "title": "Test Post"}, id="missing-body"),
-    pytest.param({"title": "Test Post", "body": "Test create post"}, id="missing-user-id"),
-    pytest.param({"userId": 999, "title": "Test Post", "body": "Test create post."}, id="invalid-user-id"),
-    pytest.param({"userId": 1, "title": "", "body": ""}, id="empty-values"),
-    pytest.param({}, id="empty-payload")
-])
+@pytest.mark.parametrize("post_data", INVALID_POST_PAYLOADS)
 def test_create_post_with_incomplete_or_edge_case_payload(api_client, post_data):
     response = api_client.post("/posts", post_data)
+
     log_api_response(response)
     assert response.status_code == 201
-    data = response.json()
-    assert isinstance(data, dict)
-    assert "id" in data
-    for key, value in post_data.items():
-        assert data[key] == value
+    assert_response_contains_payload(response, post_data)
 
 
 @allure.epic("API Testing")
@@ -105,20 +89,12 @@ def test_update_post(api_client):
     original_response = api_client.get("/posts/1")
     assert original_response.status_code == 200
     original_data = original_response.json()
-    post_data = {
-        "id": 1,
-        "title": "Updated test post",
-        "body": "This post has been updated",
-        "userId": 1
-    }
-    response = api_client.put("/posts/1", data=post_data)
+    response = api_client.put("/posts/1", data=UPDATED_POST)
+
     log_api_response(response)
     assert response.status_code == 200
-    updated_data = response.json()
-    assert isinstance(updated_data, dict)
-    for key, value in post_data.items():
-        assert updated_data[key] == value
 
+    updated_data = assert_response_contains_payload(response, UPDATED_POST)
     assert original_data["title"] != updated_data["title"]
     assert original_data["body"] != updated_data["body"]
 
@@ -128,15 +104,13 @@ def test_update_post(api_client):
 @allure.story("Update a post with invalid ID")
 @pytest.mark.api
 @pytest.mark.regression
-@pytest.mark.parametrize("post_id", [999, 0, -1, "abc"])
+@pytest.mark.parametrize("post_id", INVALID_POST_IDS)
 def test_update_post_with_invalid_id(api_client, post_id):
-    post_data = {
-        "id": post_id,
-        "title": "Updated test post",
-        "body": "This post has been updated",
-        "userId": 1
-    }
-    response = api_client.put(f"/posts/{post_id}", data=post_data)
+    response = api_client.put(
+        f"/posts/{post_id}", 
+        get_invalid_update_post_payload(post_id)
+    )
+
     log_api_response(response)
     assert response.status_code == 500
     assert "Cannot read properties of undefined" in response.text

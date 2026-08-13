@@ -2,8 +2,6 @@ from pages.locator.header_locator import HeaderLocator
 from pages.model.base_page import BasePage, LocatorStrategy
 
 class HeaderPage(BasePage):
-    def __init__(self, page):
-        super().__init__(page)
 
     def shopping_cart_link(self):
         return self.get_element(HeaderLocator.SHOPPING_CART_LINK, LocatorStrategy.LOCATOR)
@@ -53,3 +51,8 @@ class HeaderPage(BasePage):
     def click_close_menu_button(self):
         if self.verifications.is_visible(self.close_menu_button()):
             self.actions.click(self.close_menu_button())
+
+    def verify_car_badge_contains_count(self, count):
+        self.verifications.verify_element_is_visible(self.shopping_cart_badge())
+        self.verifications.verify_element_has_text(self.shopping_cart_badge(), count)
+    

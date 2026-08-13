@@ -33,15 +33,14 @@ class BasePage:
              
         if element.count() == 1:
             return element
-        else:
-            # if all else fails, try AI locator healing
+        if element.count() == 0:
             return self.helper.get_healed_element(element_description, locator)
+        raise ValueError(f"Locator matched multiple elements: {locator}")
 
     def get_element_by_locator(self, locator: str) -> Locator:
         return self.page.locator(locator)
 
     def get_element_by_role_and_description(self, locator: str, element_role, element_description: str) -> Locator:
-        # try primary locator first
         element = self.get_element_by_locator(locator)
         if element.count() == 1:
             return element

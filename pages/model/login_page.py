@@ -1,12 +1,8 @@
-from pages import locator
 from utils.config import BASE_UI_URL
 from pages.model.base_page import BasePage, LocatorStrategy
 from pages.locator.login_locator import LoginLocator
 
 class LoginPage(BasePage):
-
-    def __init__(self, page):
-        super().__init__(page)
 
     def goto(self):
         self.page.goto(BASE_UI_URL)

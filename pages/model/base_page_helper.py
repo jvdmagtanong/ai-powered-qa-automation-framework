@@ -74,13 +74,3 @@ class BasePageHelper:
             attachment_type=allure.attachment_type.TEXT
         )
 
-    # def take_screenshot(self, name: str):
-    #     screenshot = f"test-reports/screenshots/{name}.png"
-
-    #     self.page.screenshot(path=screenshot)
-
-    #     allure.attach.file(
-    #         screenshot,
-    #         name=name,
-    #         attachment_type=allure.attachment_type.PNG
-    #     )

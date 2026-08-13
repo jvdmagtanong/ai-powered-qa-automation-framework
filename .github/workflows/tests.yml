@@ -16,6 +16,18 @@ on:
           - regression
           - ui
           - api
+
+      workers:
+        description: "Number of parallel workers"
+        required: true
+        default: "2"
+        type: string
+
+      reruns:
+        description: "Number of test retries"
+        required: true
+        default: "0"
+        type: string
   pull_request:
 
 permissions:
@@ -28,8 +40,10 @@ env:
   BASE_API_URL: ${{ vars.BASE_API_URL }}
   USERNAME: ${{ vars.USERNAME }}
   PASSWORD: ${{ secrets.PASSWORD }}
-  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
   GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+  WORKERS: ${{ inputs.workers || '2' }}
+  RERUNS: ${{ inputs.reruns || '0' }}
+  RERUN_DELAY: "1"
 
 jobs:
   qa-tests:
@@ -69,10 +83,10 @@ jobs:
 
       - name: Run Test Suite
         run: |
-          if [ "${{ github.event.inputs.suite }}" = "all" ] || [ -z "${{ github.event.inputs.suite }}" ]; then
+          if [ "${{ inputs.suite }}" = "all" ] || [ -z "${{ inputs.suite }}" ]; then
             ./run_tests.sh
           else
-            ./run_tests.sh "${{ github.event.inputs.suite }}"
+            ./run_tests.sh "${{ inputs.suite }}"
           fi
 
       - name: Setup Pages

@@ -14,6 +14,7 @@ from tests.api.data.posts_data import (
 @allure.epic("API Testing")
 @allure.feature("Posts Endpoint")
 @allure.story("Get all posts")
+@allure.description("This test verifies that the API returns a list of posts with a 200 status code.")
 @pytest.mark.api
 @pytest.mark.regression
 def test_get_posts(api_client):
@@ -27,6 +28,7 @@ def test_get_posts(api_client):
 @allure.epic("API Testing")
 @allure.feature("Posts Endpoint")
 @allure.story("Get all posts by userId")
+@allure.description("This test verifies that the API returns a list of posts for a specific userId with a 200 status code.")
 @pytest.mark.api
 @pytest.mark.regression
 def test_get_posts_by_user(api_client):
@@ -41,6 +43,7 @@ def test_get_posts_by_user(api_client):
 @allure.epic("API Testing")
 @allure.feature("Posts Endpoint")
 @allure.story("Get posts by invalid userId")
+@allure.description("This test verifies that the API returns an empty list for invalid userId values.")
 @pytest.mark.api
 @pytest.mark.regression
 @pytest.mark.parametrize("user_id",[999, "abc", 0, -1, "$@#", "does-not-exist"])
@@ -55,6 +58,7 @@ def test_get_posts_by_invalid_user(api_client, user_id):
 @allure.epic("API Testing")
 @allure.feature("Posts Endpoint")
 @allure.story("Create a post")
+@allure.description("This test verifies that a new post can be created successfully with a valid payload.")
 @pytest.mark.api
 @pytest.mark.regression
 def test_create_post(api_client):
@@ -69,6 +73,7 @@ def test_create_post(api_client):
 @allure.epic("API Testing")
 @allure.feature("Posts Endpoint")
 @allure.story("Create a post with incomplete or edge-case payload")
+@allure.description("This test verifies that the API can handle incomplete or edge-case payloads when creating a post.")
 @pytest.mark.api
 @pytest.mark.regression
 @pytest.mark.parametrize("post_data", INVALID_POST_PAYLOADS)
@@ -83,6 +88,7 @@ def test_create_post_with_incomplete_or_edge_case_payload(api_client, post_data)
 @allure.epic("API Testing")
 @allure.feature("Posts Endpoint")
 @allure.story("Update a post")
+@allure.description("This test verifies that an existing post can be updated successfully with a valid payload.")
 @pytest.mark.api
 @pytest.mark.regression
 def test_update_post(api_client):
@@ -102,6 +108,7 @@ def test_update_post(api_client):
 @allure.epic("API Testing")
 @allure.feature("Posts Endpoint")
 @allure.story("Update a post with invalid ID")
+@allure.description("This test verifies that the API returns a 500 status code when attempting to update a post with an invalid ID.")
 @pytest.mark.api
 @pytest.mark.regression
 @pytest.mark.parametrize("post_id", INVALID_POST_IDS)
@@ -119,6 +126,7 @@ def test_update_post_with_invalid_id(api_client, post_id):
 @allure.epic("API Testing")
 @allure.feature("Posts Endpoint")
 @allure.story("Delete a post")
+@allure.description("This test verifies that a post can be deleted successfully and returns a 200 status code with an empty response.")
 @pytest.mark.api
 @pytest.mark.regression
 def test_delete_post(api_client):

@@ -18,5 +18,6 @@ BASE_UI_URL = get_required_env("BASE_UI_URL")
 BASE_API_URL = get_required_env("BASE_API_URL")
 USERNAME = get_required_env("USERNAME")
 PASSWORD = get_required_env("PASSWORD")
+GEMINI_API_KEY = get_required_env("GEMINI_API_KEY")
 
 HEADED = os.getenv("HEADED", "False").lower() == "true"

@@ -17,6 +17,7 @@ from tests.api.data.users_data import (
 @allure.epic("API Testing")
 @allure.feature("Users Endpoint")
 @allure.story("Get all users")
+@allure.description("This test verifies that the API returns a list of users with the expected attributes.")
 @pytest.mark.api
 @pytest.mark.regression
 def test_get_users(api_client):
@@ -32,6 +33,7 @@ def test_get_users(api_client):
 @allure.epic("API Testing")
 @allure.feature("Users Endpoint")
 @allure.story("Get user by ID")
+@allure.description("This test verifies that the API returns the correct user data for a valid user ID.")
 @pytest.mark.api
 @pytest.mark.regression
 def test_get_user_id(api_client):
@@ -51,6 +53,7 @@ def test_get_user_id(api_client):
 @allure.epic("API Testing")
 @allure.feature("Users Endpoint")
 @allure.story("Get user with invalid ID")
+@allure.description("This test verifies that the API returns a 404 status code and an empty response for invalid user IDs.")
 @pytest.mark.api
 @pytest.mark.regression
 @pytest.mark.parametrize("user_id", INVALID_USER_IDS)
@@ -65,6 +68,7 @@ def test_get_user_invalid_id(api_client, user_id):
 @allure.epic("API Testing")
 @allure.feature("Users Endpoint")
 @allure.story("Create a user")
+@allure.description("This test verifies that a new user can be created successfully with a valid payload.")
 @pytest.mark.api
 @pytest.mark.regression
 def test_create_user(api_client):
@@ -79,6 +83,7 @@ def test_create_user(api_client):
 @allure.epic("API Testing")
 @allure.feature("Users Endpoint")
 @allure.story("Update a user")
+@allure.description("This test verifies that an existing user can be updated successfully with a valid payload.")
 @pytest.mark.api
 @pytest.mark.regression
 def test_update_user(api_client):
@@ -98,6 +103,7 @@ def test_update_user(api_client):
 @allure.epic("API Testing")
 @allure.feature("Users Endpoint")
 @allure.story("Delete a user")
+@allure.description("This test verifies that a user can be deleted successfully and returns a 200 status code with an empty response.")
 @pytest.mark.api
 @pytest.mark.regression
 def test_delete_user(api_client):
@@ -110,6 +116,7 @@ def test_delete_user(api_client):
 @allure.epic("API Testing")
 @allure.feature("Users Endpoint")
 @allure.story("Create a user with incomplete/edge-case payloads")
+@allure.description("This test verifies that the API can handle incomplete or edge-case payloads when creating a user.")
 @pytest.mark.api
 @pytest.mark.regression
 @pytest.mark.parametrize("user_data", INVALID_USER_PAYLOADS)
@@ -123,6 +130,7 @@ def test_create_user_with_incomplete_payloads(api_client, user_data):
 @allure.epic("API Testing")
 @allure.feature("Users Endpoint")
 @allure.story("Update a user with invalid id")
+@allure.description("This test verifies that the API returns a 500 status code when attempting to update a user with an invalid ID.")
 @pytest.mark.api
 @pytest.mark.regression
 @pytest.mark.parametrize("user_id", INVALID_USER_IDS)

@@ -6,6 +6,7 @@ from pages.model.login_page import LoginPage
 @allure.epic("UI Testing")
 @allure.feature("Authentication")
 @allure.story("Locked User")
+@allure.description("This test verifies that an error message is displayed when a locked out user attempts to log in with valid credentials.")
 @allure.severity(allure.severity_level.CRITICAL)
 @pytest.mark.ui
 @pytest.mark.regression

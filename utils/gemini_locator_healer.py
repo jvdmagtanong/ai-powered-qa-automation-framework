@@ -1,5 +1,6 @@
 import os
 from google import genai
+from utils.config import GEMINI_API_KEY
 
 
 def suggest_locator_for_element(element_description, failed_locator, page_source):
@@ -108,12 +109,7 @@ def suggest_locator_for_elements(element_description, failed_locator, page_sourc
     return ask_gemini(prompt)
 
 def ask_gemini(prompt: str):
-    api_key = os.getenv("GEMINI_API_KEY")
-
-    if not api_key:
-        return None
-
-    client = genai.Client(api_key=api_key)
+    client = genai.Client(api_key=GEMINI_API_KEY)
 
     try:
         response = client.models.generate_content(

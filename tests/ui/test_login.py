@@ -7,6 +7,7 @@ from utils.config import USERNAME, PASSWORD
 @allure.epic("UI Testing")
 @allure.feature("Authentication")
 @allure.story("Valid Login")
+@allure.description("This test verifies that a user can log in successfully with valid credentials and lands on the dashboard.")
 @allure.severity(allure.severity_level.CRITICAL)
 @pytest.mark.ui
 @pytest.mark.smoke

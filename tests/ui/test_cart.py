@@ -11,6 +11,7 @@ from utils.config import USERNAME, PASSWORD
 @allure.epic("UI Testing")
 @allure.feature("Cart")
 @allure.story("User can add item to cart")
+@allure.description("This test verifies that a user can add an item to the cart and the cart badge updates accordingly.")
 @allure.severity(allure.severity_level.CRITICAL)
 @pytest.mark.ui
 @pytest.mark.smoke

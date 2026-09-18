@@ -39,6 +39,7 @@ env:
   BASE_UI_URL: ${{ vars.BASE_UI_URL }}
   BASE_API_URL: ${{ vars.BASE_API_URL }}
   USERNAME: ${{ vars.USERNAME }}
+  PROBLEM_USERNAME: ${{ vars.PROBLEM_USERNAME }}
   PASSWORD: ${{ secrets.PASSWORD }}
   GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
   WORKERS: ${{ inputs.workers || '2' }}

@@ -15,8 +15,11 @@ class BasePage:
     def __init__(self, page: Page):
         self.page = page
         self.actions = BasePageActions()
-        self.verifications = BasePageVerifications()
+        self.verifications = BasePageVerifications(page)
         self.helper = BasePageHelper(page)
+    
+    def goto(self, url):
+        self.page.goto(url)
 
     def get_element(self, locator: str, strategy: LocatorStrategy, role=None, element_description="") -> Locator:
         element = None

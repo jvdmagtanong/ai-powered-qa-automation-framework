@@ -1,7 +1,7 @@
-import allure
-import pytest
+import allure, pytest
 from pages.model.login_page import LoginPage
-from utils.config import USERNAME, PASSWORD
+from pages.model.header_page import HeaderPage
+from utils.config import USERNAME, PASSWORD, BASE_UI_URL
 
 
 @allure.epic("UI Testing")
@@ -13,13 +13,12 @@ from utils.config import USERNAME, PASSWORD
 @pytest.mark.smoke
 @pytest.mark.critical
 def test_login_success(page):
+    
     login = LoginPage(page)
-
-    with allure.step("Open login page"):
-        login.goto()
 
     with allure.step("Enter valid username and password and click login button"):
         login.login(USERNAME, PASSWORD)
 
-    with allure.step("Verify user lands on dashboard"):
-        assert "inventory" in page.url
+    with allure.step("Verify user lands on Catalog page and URL contains 'inventory'"):
+        header = HeaderPage(page)
+        header.verify_page_is_displayed(f"{BASE_UI_URL}/inventory.html", "Products")

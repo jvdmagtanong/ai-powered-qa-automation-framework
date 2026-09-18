@@ -1,7 +1,7 @@
 import os, pytest, allure
 from playwright.sync_api import sync_playwright
 from datetime import datetime
-from utils.config import HEADED, BASE_API_URL
+from utils.config import HEADED, BASE_API_URL, BASE_UI_URL
 from utils.api_client import ApiClient
 from utils.allure_metadata import get_allure_metadata
 from utils.dom_sanitizer import sanitize_dom
@@ -26,7 +26,12 @@ def page(request):
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=not headed)
         page = browser.new_page()
+
+        with allure.step("Open login page"):
+            page.goto(BASE_UI_URL)
+
         yield page
+        
         browser.close()
 
 
@@ -41,7 +46,7 @@ def pytest_runtest_makereport(item, call):
     report = outcome.get_result()
 
     # Only take screenshot on actual test failure
-    if report.when == "call" and report.failed:
+    if report.when == "call" and (report.failed or getattr(report, "wasxfail", False)):
         test_name = item.name
         page = item.funcargs.get("page")
 
@@ -80,6 +85,7 @@ def pytest_runtest_makereport(item, call):
         )
 
         analysis = analyze_test_failure(context)
+        print(f"\n\n[Gemini AI Response]: \n\n {analysis}")
 
         allure.attach(
             analysis,

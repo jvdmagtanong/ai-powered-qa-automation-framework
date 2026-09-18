@@ -1,11 +1,7 @@
-from utils.config import BASE_UI_URL
 from pages.model.base_page import BasePage, LocatorStrategy
 from pages.locator.login_locator import LoginLocator
 
 class LoginPage(BasePage):
-
-    def goto(self):
-        self.page.goto(BASE_UI_URL)
 
     def login_button(self):
         role, name = LoginLocator.LOGIN_BUTTON_ROLE
@@ -36,6 +32,12 @@ class LoginPage(BasePage):
         self.actions.fill(self.username_input(), username)
         self.actions.fill(self.password_input(), password)
         self.actions.click(self.login_button())
+
+    def verify_login_page_is_displayed(self, url):
+        self.verifications.verify_url_equals(url)
+        self.verifications.verify_element_is_visible(self.username_input())
+        self.verifications.verify_element_is_visible(self.password_input())
+        self.verifications.verify_element_is_visible(self.login_button())
 
     def verify_error_message(self, expected_message):
         error_message = self.error_message()

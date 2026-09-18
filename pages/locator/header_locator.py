@@ -1,5 +1,6 @@
 
 class HeaderLocator:
+    PAGE_TITLE = "[data-test='title']"
     SHOPPING_CART_LINK = "[data-test='shopping-cart-link']"
     SHOPPING_CART_BADGE = "[data-test='shopping-cart-badge']"
     OPEN_MENU_BUTTON = "[data-test='open-menu']"

@@ -31,4 +31,3 @@ class CartPage(BasePage):
             self.verifications.verify_element_is_visible(self.cart_inventory_item(item_label))
         else:
             self.verifications.verify_element_is_not_visible(self.cart_inventory_item(item_label))
-

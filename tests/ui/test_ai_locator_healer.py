@@ -1,6 +1,4 @@
-import pytest
-import allure
-
+import pytest, allure
 from utils.gemini_locator_healer import suggest_locator_for_element, suggest_locator_for_elements
 from utils.dom_sanitizer import sanitize_dom 
 from utils.config import USERNAME, PASSWORD  
@@ -8,9 +6,6 @@ from pages.model.login_page import LoginPage
 
 @pytest.mark.skip
 def test_ai_locator_healer(page):
-    with allure.step("Open login page"):
-        login = LoginPage(page)
-        login.goto()
         
     page_source = sanitize_dom(page.content())
     # print(f"Page source for healing: {page_source[:500]}...")  # Print first 500 chars for debugging
@@ -29,11 +24,9 @@ def test_ai_locator_healer(page):
     
 @pytest.mark.skip
 def test_ai_collection_locator_healer(page):
-    with allure.step("Open login page"):
-        login = LoginPage(page)
-        login.goto()
 
     with allure.step("Enter valid username and password and click login button"):
+        login = LoginPage(page)
         login.login(USERNAME, PASSWORD)
 
     page_source = sanitize_dom(page.content())
